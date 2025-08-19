@@ -204,7 +204,9 @@
                 style="opacity: 0; position: absolute; left: -9999px;">
                 @csrf
                 <input type="hidden" name="materi_id" value="{{ $materi->id }}">
-                <input type="text" id="rfid_input" name="id_rfid" required autocomplete="off">
+                <input type="text" id="rfid_input" name="id_rfid" 
+                    style="position:absolute; left:0; top:0; width:1px; height:1px; opacity:0;"
+                    required autocomplete="off">
                 <button type="submit" id="hidden_submit"></button>
             </form>
 
@@ -258,49 +260,53 @@
         }
     </style>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const rfidInput = document.getElementById('rfid_input');
-            const scanFeedback = document.getElementById('scan_feedback');
-            const rfidForm = document.getElementById('rfid_form');
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const rfidInput = document.getElementById('rfid_input');
+        const scanFeedback = document.getElementById('scan_feedback');
+        const rfidForm = document.getElementById('rfid_form');
 
-            rfidInput.focus();
+        // Fokus awal
+        rfidInput.focus();
 
-            function handleRfidScan(value) {
-                if (value.length >= 8) {
-                    console.log('RFID Terbaca:', value);
-                    scanFeedback.classList.remove('hidden');
-                    setTimeout(() => {
-                        rfidForm.submit();
-                    }, 300);
-                }
+        function handleRfidScan(value) {
+            if (value.length >= 8) {
+                rfidInput.value = value; // pastikan isi
+                rfidForm.submit();
             }
+            scanFeedback.classList.remove('hidden'); // Tampilkan feedback
+        }
 
-            rfidInput.addEventListener('input', function(e) {
-                handleRfidScan(e.target.value);
-            });
-
-            let lastValue = '';
-            setInterval(() => {
-                if (rfidInput.value && rfidInput.value !== lastValue) {
-                    lastValue = rfidInput.value;
-                    handleRfidScan(lastValue);
-                }
-            }, 200);
-
-            window.addEventListener('beforeunload', function() {
-                rfidInput.value = '';
-            });
+        // Listener saat ada input masuk dari reader
+        rfidInput.addEventListener('input', function(e) {
+            handleRfidScan(e.target.value);
         });
 
-        @if (session('success') || session('error'))
-            setTimeout(() => {
-                closeModal();
-            }, 2000);
+        // Auto-reset input setelah submit
+        rfidForm.addEventListener("submit", function() {
+            setInterval(() => rfidInput.focus(), 500);
+        });
 
-            function closeModal() {
-                document.getElementById('statusModal').classList.add('hidden');
-            }
-        @endif
-    </script>
+        // Kalau kehilangan fokus, balikin lagi
+        rfidInput.addEventListener("blur", function() {
+            setTimeout(() => rfidInput.focus(), 100);
+        });
+
+        // Bersihkan saat reload halaman
+        window.addEventListener('beforeunload', function() {
+            rfidInput.value = '';
+        });
+    });
+
+    @if (session('success') || session('error'))
+        setTimeout(() => {
+            closeModal();
+        }, 2000);
+
+        function closeModal() {
+            document.getElementById('statusModal').classList.add('hidden');
+        }
+    @endif
+</script>
+
 @endsection
