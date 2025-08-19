@@ -107,6 +107,7 @@
                                     <tr>
                                         <th class="py-2 px-3 text-left text-xs font-semibold text-gray-900 uppercase">No
                                         </th>
+
                                         <th class="py-2 px-3 text-left text-xs font-semibold text-gray-900 uppercase">RFID
                                         </th>
                                         <th class="py-2 px-3 text-left text-xs font-semibold text-gray-900 uppercase">Nama
@@ -114,6 +115,8 @@
                                         <th class="py-2 px-3 text-left text-xs font-semibold text-gray-900 uppercase">
                                             Delegasi</th>
                                         <th class="py-2 px-3 text-left text-xs font-semibold text-gray-900 uppercase">Status
+                                        </th>
+                                        <th class="py-2 px-3 text-left text-xs font-semibold text-gray-900 uppercase">Aksi
                                         </th>
                                     </tr>
                                 </thead>
@@ -147,10 +150,62 @@
                                                     @endif
                                                 </span>
                                             </td>
+                                            <td class="py-2 px-3 text-xs">
+                                                @if ($attendance)
+                                                    <!-- Tombol Reset -->
+                                                    <form action="{{ route('absensi.reset', ['materi' => $materi->id, 'peserta' => $p->id]) }}" 
+                                                        method="POST" id="resetForm-{{ $p->id }}">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button"
+                                                            onclick="openResetModal({{ $p->id }})"
+                                                            class="px-3 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800 hover:bg-red-200">
+                                                            <i class="ri-refresh-line mr-1"></i>
+                                                        </button>
+                                                    </form>
+
+                                                @else
+                                                    <span class="text-gray-400 italic">-</span>
+                                                @endif
+                                            </td>
+
+
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+             <!-- Modal Konfirmasi Reset -->
+            <div id="resetModal-{{ $p->id }}"
+                class="hidden fixed inset-0 flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm">
+                <div class="bg-white rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl transform animate-bounce">
+                    <div class="text-center">
+                        <div
+                            class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 mb-4">
+                            <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-3">Konfirmasi Reset</h3>
+                        <div class="bg-yellow-50 border border-yellow-200 text-yellow-800 px-4 py-3 rounded-xl mb-4">
+                            Apakah kamu yakin ingin mereset absensi <b>{{ $p->nama }}</b> ke <b>Belum Absen</b>?
+                        </div>
+
+                        <div class="flex gap-3">
+                            <button type="button" onclick="closeResetModal({{ $p->id }})"
+                                class="w-1/2 bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-xl hover:bg-gray-300 transition-all duration-300">
+                                Batal
+                            </button>
+                            <button type="button" onclick="confirmReset({{ $p->id }})"
+                                class="w-1/2 bg-red-200 text-red-800 font-semibold py-2 px-4 rounded-xl hover:bg-red-300 transition-all duration-300">
+                                Ya, Reset
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -308,5 +363,21 @@
         }
     @endif
 </script>
+
+<script>
+    function openResetModal(pesertaId, nama) {
+        document.getElementById('resetModal-' + pesertaId).classList.remove('hidden');
+    }
+
+    function closeResetModal(pesertaId) {
+        document.getElementById('resetModal-' + pesertaId).classList.add('hidden');
+    }
+
+    function confirmReset(pesertaId) {
+        document.getElementById('resetForm-' + pesertaId).submit();
+    }
+</script>
+
+
 
 @endsection

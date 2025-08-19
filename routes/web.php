@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('absensi', AbsensiController::class);
     Route::get('/absensi/scan/{materi}', [AbsensiController::class, 'scan'])->name('absensi.scan');
     Route::get('/absensi/export/{materi}', [AbsensiController::class, 'export'])->name('absensi.export');
+    Route::delete('/absensi/reset/{materi}/{peserta}', [AbsensiController::class, 'reset'])->name('absensi.reset');
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

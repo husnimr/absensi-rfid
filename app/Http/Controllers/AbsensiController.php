@@ -78,6 +78,19 @@ class AbsensiController extends Controller
         return view('absensi.scan', compact('materi', 'peserta'));
     }
 
+    public function reset($materiId, $pesertaId)
+    {
+        $materi = Materi::where('user_id', Auth::id())->findOrFail($materiId);
+
+        // hapus absensi peserta untuk materi ini
+        Absensi::where('materi_id', $materi->id)
+            ->where('peserta_id', $pesertaId)
+            ->delete();
+
+        return redirect()->back()->with('success', 'Status absensi berhasil direset');
+    }
+
+
     public function export($materiId)
     {
         $materi = Materi::where('user_id', Auth::id())->findOrFail($materiId);
