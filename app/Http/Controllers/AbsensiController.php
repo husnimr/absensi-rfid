@@ -90,7 +90,6 @@ class AbsensiController extends Controller
         return redirect()->back()->with('success', 'Status absensi berhasil direset');
     }
 
-
     public function export($materiId)
     {
         $materi = Materi::where('user_id', Auth::id())->findOrFail($materiId);

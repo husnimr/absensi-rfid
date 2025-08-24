@@ -13,11 +13,31 @@ class PesertaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    // public function index()
+    // {
+    //    $peserta = Peserta::where('user_id', Auth::id())->orderBy('nama')->paginate(20);
+    //     return view('peserta.index', compact('peserta'));
+    // }
+
+    public function index(Request $request)
     {
-       $peserta = Peserta::where('user_id', Auth::id())->orderBy('nama')->paginate(20);
+        $query = Peserta::where('user_id', Auth::id()); // filter user_id dulu
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                ->orWhere('id_rfid', 'like', "%{$search}%")
+                ->orWhere('asal_delegasi', 'like', "%{$search}%")
+                ->orWhere('komisi', 'like', "%{$search}%");
+            });
+        }
+
+        $peserta = $query->orderBy('nama')->paginate(20);
+
         return view('peserta.index', compact('peserta'));
     }
+
 
     /**
      * Show the form for creating a new resource.

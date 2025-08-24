@@ -22,6 +22,17 @@
                 </div>
             </div>
 
+            <!-- Search Bar -->
+            <div class="p-4 bg-gray-50 border-b border-gray-200/50 flex justify-between items-center">
+                <form method="GET" action="{{ route('peserta.index') }}" class="w-full max-w-md">
+                    <div class="relative">
+                        <input type="text" name="search" value="{{ request('search') }}"
+                            placeholder="Cari nama, ID kartu, asal delegasi..."
+                            class="w-full pl-10 pr-4 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <i class="ri-search-line absolute left-3 top-2.5 text-gray-400"></i>
+                    </div>
+                </form>
+            </div>
             <!-- Participant Data -->
             <div class="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 overflow-hidden">
                 <div class="px-6 py-4 border-b border-gray-200/50 bg-gradient-to-r from-gray-50 to-gray-100">

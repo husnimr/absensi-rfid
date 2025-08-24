@@ -185,7 +185,7 @@
                 <div class="bg-white rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl transform animate-bounce">
                     <div class="text-center">
                         <div
-                            class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 mb-4">
+                            class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-gradient-to-r from-red-400 to-rose-500 mb-4">
                             <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -203,7 +203,7 @@
                                 Batal
                             </button>
                             <button type="button" onclick="confirmReset({{ $p->id }})"
-                                class="w-1/2 bg-red-200 text-red-800 font-semibold py-2 px-4 rounded-xl hover:bg-red-300 transition-all duration-300">
+                                class="w-1/2 bg-gray-200 text-red-800 font-semibold py-2 px-4 rounded-xl hover:bg-red-300 transition-all duration-300">
                                 Ya, Reset
                             </button>
                         </div>
